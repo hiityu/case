@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import { csv } from 'd3';
+import BarChart from './Components/BarChart';
+import Dropdown from './Components/Dropdown';
+const App = () => {
+  const [data, setData] = useState([]);
+  
+  useEffect(() => {
+    csv('GenericData.csv').then(setData);
+  }, []);
+  const [xaxis,setXAxis] = useState('First');
+  const [yaxis,setYAxis] = useState('Total');
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Dropdown label={'X-axis'} 
+      onChange={event => {
+      setXAxis(event.target.value);
+      }}
+      />
+      <Dropdown label={'Y-axis'} 
+        onChange={
+        event => {
+          setYAxis(event.target.value);
+        }}
+      />
+      <BarChart data={data} xaxis={xaxis} yaxis={yaxis}/>
     </div>
   );
 }
